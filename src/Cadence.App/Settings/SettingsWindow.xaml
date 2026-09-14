@@ -38,7 +38,7 @@
             <Button x:Name="ResetHudButton" Content="Reset HUD position" Style="{StaticResource SubtleButton}"
                     HorizontalAlignment="Left" Click="OnResetHudPosition" Margin="0,0,0,8" />
             <TextBlock Style="{StaticResource Explainer}"
-                       Text="An always-on-top strip showing each provider as one line: percentage, pace against even consumption, and when it runs out. Drag it anywhere; it snaps to screen edges and remembers where you put it for each monitor arrangement. Unlocked it becomes clickable while your cursor is over it, so it cannot be dragged once locked." />
+                       Text="An always-on-top strip showing each provider's current session as one line: percentage, pace against even consumption, and when it runs out. Drag it anywhere; it snaps to screen edges and remembers where you put it for each monitor arrangement. Unlocked it becomes clickable while your cursor is over it, so it cannot be dragged once locked." />
 
             <TextBlock Text="Startup" Style="{StaticResource SectionHeading}" />
             <CheckBox x:Name="StartupCheck" Content="Start Cadence when I sign in" />

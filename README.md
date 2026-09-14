@@ -63,7 +63,7 @@ the information is spread across:
 |---|---|
 | **Tray icon** | One glance: two bars, a number, or a ring. Colour tracks pressure, and the tooltip carries the long-form text. |
 | **Flyout** | The real UI. One card per provider, a bar per quota window, and one plain sentence of forecast under each. |
-| **HUD** | An optional always-on-top strip, one line per provider. This is where the menu-bar vocabulary lives. |
+| **HUD** | An optional always-on-top strip, one line per provider for its current session. This is where the menu-bar vocabulary lives. |
 | **CLI** | `cadence usage --json` for your own status bar, plus cost and backtest reporting. |
 
 ### The HUD
@@ -73,8 +73,9 @@ the information is spread across:
 ● DEX  54%  ↑44  out 20:25
 ```
 
-Percentage, pace against even consumption, and the outlook — an exhaustion time once that is the
-likelier outcome, otherwise the projection. Turn it on in Settings → General.
+For each provider's current session: percentage, pace against even consumption, and the outlook — an exhaustion time once that is the
+likelier outcome, otherwise the projection. Weekly and per-model limits stay in the
+panel, where there is room to explain them. Turn it on in Settings → General.
 
 Drag it anywhere; it snaps to work-area edges and remembers where you put it **per monitor
 arrangement**, so docking and undocking does not mean dragging it back twice a day. A remembered
