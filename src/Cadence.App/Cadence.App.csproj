@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Cadence.App</RootNamespace>
+    <AssemblyName>Cadence</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\Cadence.ico</ApplicationIcon>
+    <!-- Program.Main replaces the Main WPF generates, so the installer hooks run before anything else -->
+    <StartupObject>Cadence.App.Program</StartupObject>
+    <!-- required by [LibraryImport] source generation in Interop/ -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <!-- WPF text layout needs real culture data: MS.Internal.FontCache.MajorLanguages constructs
+         CultureInfo("en") during glyph fallback and throws under invariant mode, taking the UI
+         down on the first rendered TextBlock. The CLI and Core keep invariant mode. -->
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="H.NotifyIcon.Wpf" />
+    <PackageReference Include="Velopack" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="SkiaSharp" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Sinks.File" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cadence.Core\Cadence.Core.csproj" />
+  </ItemGroup>
+</Project>

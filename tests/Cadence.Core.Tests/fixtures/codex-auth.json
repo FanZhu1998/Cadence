@@ -1,0 +1,11 @@
+{
+  "auth_mode": "chatgpt",
+  "OPENAI_API_KEY": null,
+  "tokens": {
+    "id_token": "PLACEHOLDER_JWT",
+    "access_token": "fake-access-token-for-tests",
+    "refresh_token": "fake-refresh-token-for-tests",
+    "account_id": "acct_test_123"
+  },
+  "last_refresh": "2026-09-09T05:06:13.950378700Z"
+}

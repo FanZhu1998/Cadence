@@ -1,0 +1,92 @@
+<Window x:Class="Cadence.App.History.HistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Cadence.App.Controls"
+        Title="Cadence History"
+        Width="820" Height="600" MinWidth="620" MinHeight="440"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource SurfaceBrush}"
+        UseLayoutRounding="True" SnapsToDevicePixels="True">
+
+  <Grid Margin="14">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
+      <ComboBox x:Name="ProviderBox" Width="150" Margin="0,0,10,0" />
+      <ComboBox x:Name="WindowBox" Width="240" Margin="0,0,10,0" />
+      <ComboBox x:Name="RangeBox" Width="120" Margin="0,0,10,0" />
+      <Button x:Name="ExportButton" Content="Export CSV" Style="{StaticResource SubtleButton}" Click="OnExport" />
+    </StackPanel>
+
+    <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
+
+      <TabItem Header="Usage">
+        <Grid Margin="0,12,0,0">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+
+          <Border Grid.Row="0" Background="{DynamicResource HoverBrush}" CornerRadius="6" Padding="10">
+            <controls:UsageChart x:Name="Chart"
+                                 LineBrush="{DynamicResource BarFillBrush}"
+                                 GridBrush="{DynamicResource HairlineBrush}"
+                                 AxisBrush="{DynamicResource MutedBrush}"
+                                 EpochBrush="{DynamicResource PaceTickBrush}" />
+          </Border>
+
+          <TextBlock Grid.Row="1" x:Name="UsageSummary" Style="{StaticResource CaptionText}"
+                     Margin="2,8,0,0" TextWrapping="Wrap" />
+        </Grid>
+      </TabItem>
+
+      <TabItem Header="Cost">
+        <Grid Margin="0,12,0,0">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <TextBlock Grid.Row="0" x:Name="CostSummary" Style="{StaticResource BodyText}"
+                     FontFamily="{DynamicResource NumericFont}" Margin="2,0,0,10" />
+
+          <DataGrid Grid.Row="1" x:Name="CostGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                    Background="Transparent" BorderThickness="0" RowBackground="Transparent"
+                    GridLinesVisibility="Horizontal"
+                    HorizontalGridLinesBrush="{DynamicResource HairlineBrush}"
+                    Foreground="{DynamicResource TextBrush}"
+                    FontFamily="{DynamicResource NumericFont}" FontSize="11"
+                    HeadersVisibility="Column">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Day" Binding="{Binding Day}" Width="110" />
+              <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="*" />
+              <DataGridTextColumn Header="Tokens" Binding="{Binding Tokens}" Width="120" />
+              <DataGridTextColumn Header="At API rates" Binding="{Binding Cost}" Width="120" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </Grid>
+      </TabItem>
+
+      <TabItem Header="Forecast accuracy">
+        <ScrollViewer Style="{StaticResource ThinScrollViewer}" Margin="0,12,0,0">
+          <StackPanel>
+            <Button x:Name="BacktestButton" Content="Run backtest on this window"
+                    Style="{StaticResource SubtleButton}" HorizontalAlignment="Left"
+                    Click="OnRunBacktest" Margin="0,0,0,10" />
+
+            <Border Background="{DynamicResource HoverBrush}" CornerRadius="6" Padding="12">
+              <TextBox x:Name="BacktestBox" IsReadOnly="True" TextWrapping="Wrap"
+                       Background="Transparent" BorderThickness="0"
+                       Foreground="{DynamicResource MutedBrush}"
+                       FontFamily="{DynamicResource NumericFont}" FontSize="11"
+                       Text="Replays every stored sample, forecasting only from data that existed at the time, and scores the result against what actually happened.&#x0a;&#x0a;The blended estimator is printed beside plain even-pace. If the blend does not win on your history, turn it off in Settings — a calibrated simple model beats an overfit clever one." />
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+    </TabControl>
+  </Grid>
+</Window>

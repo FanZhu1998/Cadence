@@ -1,0 +1,12 @@
+{
+  "five_hour":         { "utilization": 42.5, "resets_at": "2026-09-13T20:00:00Z" },
+  "seven_day":         { "utilization": 67.0, "resets_at": "2026-09-20T09:00:00Z" },
+  "seven_day_opus":    { "utilization": 12.0, "resets_at": "2026-09-20T09:00:00Z" },
+  "seven_day_sonnet":  { "utilization": 31.5, "resets_at": "2026-09-20T09:00:00Z" },
+  "seven_day_routines":{ "utilization":  5.0, "resets_at": "2026-09-20T09:00:00Z" },
+  "claude_design":     { "utilization": 42.5, "resets_at": "2026-09-13T20:00:00Z" },
+  "omelette":          { "utilization": 42.5, "resets_at": "2026-09-13T20:00:00Z" },
+  "extra_usage":       { "spent": 12.40, "limit": 50.00, "currency": "USD" },
+  "subscriptionType":  "default_claude_max_20x",
+  "email":             "user@example.com"
+}

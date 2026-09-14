@@ -1,0 +1,63 @@
+<!--
+  Theme-independent tokens: type, geometry, motion.
+  Colours live in Dark.xaml / Light.xaml and are swapped by ThemeManager.
+
+  Ported from the fan-zhu.com design system. The idioms carried over are the ones that make an
+  instrument panel read as one: monospaced uppercase eyebrows for structure, tabular figures for
+  every number, hairline rules instead of boxes, a tight 4px radius, and a single accent hue in two
+  tones — the receded one for labels, the dominant one for the forecast.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+  <!-- Type ==================================================================================
+
+       Full fallback chains, exactly as the site declares them. None of the three preferred faces
+       ship with Windows, but Franklin Gothic Medium and Cascadia Mono do, and they are the site's
+       own next choices. Installing Inter or IBM Plex Mono later upgrades the app with no change
+       here.
+  -->
+  <FontFamily x:Key="DisplayFont">Libre Franklin, Franklin Gothic Medium, Segoe UI Variable Display, Segoe UI</FontFamily>
+  <FontFamily x:Key="UiFont">Inter, Segoe UI Variable Text, Segoe UI</FontFamily>
+  <FontFamily x:Key="NumericFont">IBM Plex Mono, Cascadia Mono, Consolas</FontFamily>
+
+  <!-- Scale. Desktop chrome runs smaller than a web page: what is 0.68rem there is 11px here. -->
+  <sys:Double x:Key="FontMicro">10</sys:Double>
+  <sys:Double x:Key="FontXs">11</sys:Double>
+  <sys:Double x:Key="FontSm">12</sys:Double>
+  <sys:Double x:Key="FontMd">13</sys:Double>
+  <sys:Double x:Key="FontLg">15</sys:Double>
+  <sys:Double x:Key="FontXl">19</sys:Double>
+
+  <!-- Letterspacing, in WPF's em/1000 units. The site's 0.14em becomes 140. -->
+  <sys:Double x:Key="TrackEyebrow">140</sys:Double>
+  <sys:Double x:Key="TrackLabel">100</sys:Double>
+  <sys:Double x:Key="TrackBrand">80</sys:Double>
+  <!-- Display type tightens as it grows, per the site's -0.021em on headings. -->
+  <sys:Double x:Key="TrackDisplay">-21</sys:Double>
+
+  <!-- Geometry ============================================================================== -->
+
+  <sys:Double x:Key="FlyoutWidth">348</sys:Double>
+  <!-- 4px, not 8: the source system is deliberately square-ish, which reads as instrument
+       rather than as consumer app. -->
+  <CornerRadius x:Key="SurfaceRadius">4</CornerRadius>
+  <CornerRadius x:Key="ControlRadius">3</CornerRadius>
+  <CornerRadius x:Key="BarRadius">2</CornerRadius>
+  <sys:Double x:Key="BarHeight">6</sys:Double>
+  <sys:Double x:Key="BarRadiusValue">2</sys:Double>
+
+  <Thickness x:Key="Gutter">14,0,14,0</Thickness>
+  <Thickness x:Key="CardPadding">14,12,14,14</Thickness>
+
+  <!-- The 2px rule that marks a card's identity, as .entry does on the site. -->
+  <sys:Double x:Key="AccentRuleWidth">2</sys:Double>
+
+  <!-- Motion ================================================================================
+       cubic-bezier(0.22, 0.61, 0.36, 1) — the site's single easing curve.
+  -->
+  <Duration x:Key="FastDuration">0:0:0.20</Duration>
+  <Duration x:Key="MediumDuration">0:0:0.32</Duration>
+  <KeySpline x:Key="StandardEase">0.22,0.61 0.36,1</KeySpline>
+</ResourceDictionary>

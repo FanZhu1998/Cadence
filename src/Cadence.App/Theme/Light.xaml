@@ -1,0 +1,89 @@
+<!--
+  Light palette, ported verbatim from fan-zhu.com.
+
+  Note the accent inverts in role rather than merely lightening: the dominant tone becomes the
+  *darker* blue (#17548F) because it now has to hold against white. Accent2 stays the receded one
+  by being lighter here, where in dark it was dimmer. That inversion is the point of having two
+  tones, and getting it backwards would make labels shout over the forecast.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Color x:Key="PageColor">#F5F8FC</Color>
+  <Color x:Key="SurfaceColor">#FFFFFF</Color>
+  <Color x:Key="Surface2Color">#EAF0F8</Color>
+  <Color x:Key="Surface3Color">#DDE6F2</Color>
+
+  <Color x:Key="TextColor">#0D1826</Color>     <!-- 16.77:1 -->
+  <Color x:Key="Text2Color">#46586E</Color>    <!--  6.84:1 -->
+  <Color x:Key="MutedColor">#56687E</Color>    <!--  5.36:1 -->
+
+  <Color x:Key="AccentColor">#17548F</Color>   <!--  7.30:1 -->
+  <Color x:Key="AccentHiColor">#0D3B68</Color> <!-- 10.70:1 -->
+  <Color x:Key="Accent2Color">#2B6CB0</Color>  <!--  5.09:1 -->
+  <Color x:Key="AccentDimColor">#1A17548F</Color>
+
+  <Color x:Key="BullColor">#0F6B46</Color>     <!--  6.14:1 -->
+  <Color x:Key="BearColor">#A8321F</Color>     <!--  6.28:1 -->
+
+  <Color x:Key="Ramp1Color">#EEF4FB</Color>
+  <Color x:Key="Ramp2Color">#D4E4F4</Color>
+  <Color x:Key="Ramp3Color">#A9C8E8</Color>
+  <Color x:Key="Ramp4Color">#71A3D3</Color>
+  <Color x:Key="Ramp5Color">#2F6699</Color>
+  <Color x:Key="Ramp6Color">#1C4F80</Color>
+  <Color x:Key="Ramp7Color">#0E3357</Color>
+
+  <Color x:Key="LineColor">#1F0D1826</Color>
+  <Color x:Key="Line2Color">#330D1826</Color>
+  <Color x:Key="GlowColor">#1217548F</Color>
+  <Color x:Key="HoverColor">#0F0D1826</Color>
+
+  <Color x:Key="TrackColor">#1A0D1826</Color>
+  <Color x:Key="BarFillColor">#46586E</Color>
+  <Color x:Key="PaceTickColor">#4D0D1826</Color>
+
+  <Color x:Key="HudBackgroundColor">#F2FFFFFF</Color>
+  <Color x:Key="HudBorderColor">#330D1826</Color>
+  <Color x:Key="HudTextColor">#0D1826</Color>
+  <Color x:Key="HudMutedColor">#46586E</Color>
+
+  <!-- Brushes ================================================================================ -->
+
+  <SolidColorBrush x:Key="PageBrush" Color="{StaticResource PageColor}" />
+  <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}" />
+  <SolidColorBrush x:Key="Surface2Brush" Color="{StaticResource Surface2Color}" />
+  <SolidColorBrush x:Key="Surface3Brush" Color="{StaticResource Surface3Color}" />
+  <SolidColorBrush x:Key="ElevatedBrush" Color="{StaticResource SurfaceColor}" />
+
+  <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
+  <SolidColorBrush x:Key="Text2Brush" Color="{StaticResource Text2Color}" />
+  <SolidColorBrush x:Key="MutedBrush" Color="{StaticResource MutedColor}" />
+
+  <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+  <SolidColorBrush x:Key="AccentHiBrush" Color="{StaticResource AccentHiColor}" />
+  <SolidColorBrush x:Key="Accent2Brush" Color="{StaticResource Accent2Color}" />
+  <SolidColorBrush x:Key="AccentDimBrush" Color="{StaticResource AccentDimColor}" />
+
+  <SolidColorBrush x:Key="BullBrush" Color="{StaticResource BullColor}" />
+  <SolidColorBrush x:Key="BearBrush" Color="{StaticResource BearColor}" />
+  <SolidColorBrush x:Key="OverrunBrush" Color="{StaticResource BearColor}" />
+
+  <SolidColorBrush x:Key="HairlineBrush" Color="{StaticResource LineColor}" />
+  <SolidColorBrush x:Key="Hairline2Brush" Color="{StaticResource Line2Color}" />
+  <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}" />
+  <SolidColorBrush x:Key="GlowBrush" Color="{StaticResource GlowColor}" />
+
+  <SolidColorBrush x:Key="TrackBrush" Color="{StaticResource TrackColor}" />
+  <SolidColorBrush x:Key="BarFillBrush" Color="{StaticResource BarFillColor}" />
+  <SolidColorBrush x:Key="PaceTickBrush" Color="{StaticResource PaceTickColor}" />
+
+  <SolidColorBrush x:Key="HudBackgroundBrush" Color="{StaticResource HudBackgroundColor}" />
+  <SolidColorBrush x:Key="HudBorderBrush" Color="{StaticResource HudBorderColor}" />
+  <SolidColorBrush x:Key="HudTextBrush" Color="{StaticResource HudTextColor}" />
+  <SolidColorBrush x:Key="HudMutedBrush" Color="{StaticResource HudMutedColor}" />
+
+  <SolidColorBrush x:Key="Ramp1Brush" Color="{StaticResource Ramp1Color}" />
+  <SolidColorBrush x:Key="Ramp4Brush" Color="{StaticResource Ramp4Color}" />
+  <SolidColorBrush x:Key="Ramp6Brush" Color="{StaticResource Ramp6Color}" />
+</ResourceDictionary>

@@ -1,0 +1,20 @@
+{
+  "response": {
+    "groups": [
+      {
+        "displayName": "Gemini Models",
+        "buckets": [
+          { "bucketId": "gemini_weekly", "displayName": "Weekly",   "remaining": { "remainingFraction": 0.34 }, "resetTime": "2026-09-20T00:00:00Z", "description": "7 day limit" },
+          { "bucketId": "gemini_5h",     "displayName": "5 hour",   "remaining": { "remainingFraction": 0.81 }, "resetTime": "2026-09-13T21:00:00Z", "description": "5h limit" }
+        ]
+      },
+      {
+        "displayName": "Claude and GPT models",
+        "buckets": [
+          { "bucketId": "byok_weekly", "displayName": "Weekly", "remaining": { "remainingFraction": 0.95 }, "resetTime": "2026-09-20T00:00:00Z", "description": "week" },
+          { "bucketId": "byok_meta",   "displayName": "Context", "resetTime": "2026-09-20T00:00:00Z" }
+        ]
+      }
+    ]
+  }
+}
