@@ -113,7 +113,17 @@ fixtures are synthetic.
 
 ## Gemini
 
-`%USERPROFILE%\.gemini\oauth_creds.json` absent — no Gemini CLI auth on this
-machine. Consistent with the 2026-06-18 consumer deprecation. Antigravity
-probe is therefore built to spec and exercised against a fake loopback
-server in tests rather than a live one.
+Gemini quota comes from the Antigravity app's local language server, not from
+Google's APIs, so no Google credentials are read or sent. Cadence finds the
+server's process through WMI (`Win32_Process`, name matching `language_server`)
+and reads two values from its command line: the CSRF token (`--csrf_token`)
+and, when present, the port (`--extension_server_port`). Otherwise the port is
+the loopback port that process listens on, from the TCP table
+(`GetExtendedTcpTable`).
+
+Requests are HTTPS POSTs to
+`https://127.0.0.1:<port>/exa.language_server_pb.LanguageServerService/<method>`
+with the token in the `X-Codeium-Csrf-Token` header. The server's certificate is
+self-signed and is accepted for `127.0.0.1` only. The CSRF token is the only
+secret involved, and it never leaves the machine. When Antigravity is not
+running, the Gemini card asks you to open it.

@@ -1,6 +1,6 @@
 # Cadence
 
-An AI quota monitor for the Windows notification area, for Claude, Codex and Gemini.
+An AI quota monitor for the Windows notification area, for Claude and Codex.
 
 It answers one question the providers' own dashboards do not: **not "how much have I used" but
 "am I going to run out, and when".**
@@ -207,18 +207,13 @@ rather than reporting a working setup as broken.
 Falls back to driving `codex app-server` over JSON-RPC — read-only, untrusted, every stage bounded,
 and the child placed in a kill-on-close Job Object so it cannot outlive Cadence.
 
-### Gemini — read this one
+### Gemini
 
-**Gemini CLI OAuth is closed to consumers.** Since 18 June 2026, Gemini Code Assist no longer serves
-individuals, Google AI Pro, or Google AI Ultra. Google has also stated that using Gemini CLI OAuth
-credentials from third-party software may trigger abuse detection or account restrictions.
-
-Cadence therefore offers three modes and defaults to the one that touches no Google credentials:
+Cadence offers two modes and defaults to the one that touches no Google credentials:
 
 | Mode | Who it is for |
 |---|---|
 | **Antigravity** (default) | Queries the local Antigravity language server over loopback. No Google credentials reach Cadence. |
-| **Code Assist** | Standard and Enterprise subscriptions only, behind an explicit toggle. |
 | **API key** | Local accounting against published tier limits. Less magical; still working in two years. |
 
 Loopback TLS accepts the language server's self-signed certificate **only for 127.0.0.1**, never as
