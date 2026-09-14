@@ -270,7 +270,7 @@ With independent marks on top, the usage still to come before the reset is a *co
 sum, and both of its first two moments grow linearly with the time left:
 
 ```math
-\mathbb{E}[\Delta U] = \lambda T \, \mathbb{E}[M], \qquad \operatorname{Var}[\Delta U] = \lambda T \, \mathbb{E}[M^2]
+\mathbb{E}[\Delta U] = \lambda T \, \mathbb{E}[M], \qquad \mathrm{Var}[\Delta U] = \lambda T \, \mathbb{E}[M^2]
 ```
 
 That is the property the engine is built on: estimate a rate and a variance per hour, then scale
