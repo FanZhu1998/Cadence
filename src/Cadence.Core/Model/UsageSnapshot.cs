@@ -44,6 +44,21 @@ public sealed record UsageSnapshot
                .OrderByDescending(w => w.UsedPercent)
                .FirstOrDefault();
 
+    /// <summary>
+    /// The current session: the short rolling window, typically five hours, or null when the
+    /// provider has none.
+    /// </summary>
+    /// <remarks>
+    /// Chosen by <see cref="WindowKind"/>, never by a provider's window id, so a new provider or a
+    /// renamed window is picked up without touching any caller. Where a provider reports more than
+    /// one session window, the one closest to exhaustion wins, for the same reason
+    /// <see cref="PrimaryWindow"/> takes a maximum: the tightest one is the one that stops you.
+    /// </remarks>
+    public QuotaWindow? SessionWindow =>
+        Windows.Where(w => w.Kind is WindowKind.Session)
+               .OrderByDescending(w => w.UsedPercent ?? -1)
+               .FirstOrDefault();
+
     public static UsageSnapshot Failed(ProviderId provider, string source, FetchError error, DateTimeOffset at) =>
         new() { Provider = provider, FetchedAt = at, SourceLabel = source, Error = error };
 

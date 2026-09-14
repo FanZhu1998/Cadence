@@ -64,7 +64,7 @@ public sealed partial class HudViewModel : ObservableObject
 
         while (Rows.Count > states.Length) Rows.RemoveAt(Rows.Count - 1);
 
-        HasAnyData = states.Any(s => s.Snapshot?.PrimaryWindow?.UsedPercent is not null);
+        HasAnyData = states.Any(s => WindowFor(s.Snapshot)?.UsedPercent is not null);
     }
 
     private void Update(HudRowViewModel row, ProviderState state, DateTimeOffset now)
@@ -74,7 +74,7 @@ public sealed partial class HudViewModel : ObservableObject
         row.ShortName = descriptor.ShortName;
         row.AccentHex = descriptor.AccentHex;
 
-        var window = state.Snapshot?.PrimaryWindow;
+        var window = WindowFor(state.Snapshot);
         var used = window?.UsedPercent;
 
         row.Used = used;
@@ -91,6 +91,18 @@ public sealed partial class HudViewModel : ObservableObject
         row.PaceText = PaceToken(window?.Forecast);
         row.OutlookText = OutlookToken(state, window, now);
     }
+
+    /// <summary>
+    /// Which of a provider's windows the HUD reports: the current session, and only that.
+    /// </summary>
+    /// <remarks>
+    /// The HUD is a glance, and a glance should answer "can I keep working right now". Weekly and
+    /// per-model windows answer a different question on a different timescale: a weekly model
+    /// limit at 78% in the corner of the screen reads as an emergency that is days away. Those
+    /// windows stay in the panel and the tray, where there is room to explain them. This is the
+    /// one place to change if the HUD ever offers a choice of window.
+    /// </remarks>
+    internal static QuotaWindow? WindowFor(UsageSnapshot? snapshot) => snapshot?.SessionWindow;
 
     /// <summary>
     /// The pace arrow: how far ahead of or behind even consumption.
@@ -116,7 +128,9 @@ public sealed partial class HudViewModel : ObservableObject
     {
         if (state.Error is { IsTerminal: true }) return "sign in";
         if (state.CircuitOpen) return "paused";
-        if (window is null) return state.Error is not null ? "stale" : "…";
+        // "…" means nothing has arrived yet. A provider that has reported but has no session
+        // window has nothing for the HUD to say, which is not the same as still loading.
+        if (window is null) return state.Error is not null ? "stale" : state.Snapshot is null ? "…" : string.Empty;
 
         if (window.Forecast is { IsAvailable: true } forecast)
         {
