@@ -1,0 +1,7 @@
+{
+  "quotaBuckets": [
+    { "modelId": "gemini-2.5-pro",   "remainingFraction": 0.62, "resetTime": "2026-09-14T00:00:00Z" },
+    { "modelId": "gemini-2.5-pro",   "remainingFraction": 0.44, "resetTime": "2026-09-14T00:00:00Z" },
+    { "modelId": "gemini-2.5-flash", "remainingFraction": 0.90, "resetTime": "2026-09-14T00:00:00Z" }
+  ]
+}

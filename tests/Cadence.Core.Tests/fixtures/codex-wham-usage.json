@@ -1,0 +1,11 @@
+{
+  "rate_limit": {
+    "primary_window":   { "used_percent": 38.2, "window_minutes": 300,   "resets_in_seconds": 7200 },
+    "secondary_window": { "used_percent": 71.9, "window_minutes": 10080, "resets_in_seconds": 259200 },
+    "additional_rate_limits": [
+      { "id": "codex_spark_5h", "name": "Codex Spark", "used_percent": 10.0, "window_minutes": 300, "resets_in_seconds": 3600 }
+    ]
+  },
+  "plan_type": "pro",
+  "credits": { "balance": 42.50, "expires_at": "2026-10-01T00:00:00Z" }
+}

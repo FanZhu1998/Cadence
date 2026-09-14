@@ -1,0 +1,24 @@
+{
+  "lastUpdated": "2026-09-13",
+  "note": "USD per million tokens. Cadence ships this as a starting point and never hardcodes prices in code. Copy this file into the Cadence config folder as pricing.json and edit it to override, per model. Keys match by longest prefix, so a dated model id such as claude-opus-5-20260814 resolves via claude-opus-5.",
+  "models": {
+    "claude-fable-5-1":  { "input": 15.00, "output": 75.00, "cacheRead": 1.50, "cacheWrite5m": 18.75, "cacheWrite1h": 30.00 },
+    "claude-opus-5":     { "input": 15.00, "output": 75.00, "cacheRead": 1.50, "cacheWrite5m": 18.75, "cacheWrite1h": 30.00 },
+    "claude-sonnet-5":   { "input":  3.00, "output": 15.00, "cacheRead": 0.30, "cacheWrite5m":  3.75, "cacheWrite1h":  6.00 },
+    "claude-haiku-4-5":  { "input":  1.00, "output":  5.00, "cacheRead": 0.10, "cacheWrite5m":  1.25, "cacheWrite1h":  2.00 },
+    "claude-opus-4":     { "input": 15.00, "output": 75.00, "cacheRead": 1.50, "cacheWrite5m": 18.75, "cacheWrite1h": 30.00 },
+    "claude-sonnet-4":   { "input":  3.00, "output": 15.00, "cacheRead": 0.30, "cacheWrite5m":  3.75, "cacheWrite1h":  6.00 },
+    "claude-3-5-haiku":  { "input":  0.80, "output":  4.00, "cacheRead": 0.08, "cacheWrite5m":  1.00, "cacheWrite1h":  1.60 },
+
+    "gpt-6":             { "input":  2.50, "output": 10.00, "cacheRead": 0.25, "cacheWrite5m": 0.00 },
+    "codex-auto-review": { "input":  1.25, "output": 10.00, "cacheRead": 0.125, "cacheWrite5m": 0.00 },
+    "gpt-5":             { "input":  1.25, "output": 10.00, "cacheRead": 0.125, "cacheWrite5m": 0.00 },
+    "o4":                { "input":  2.00, "output":  8.00, "cacheRead": 0.50, "cacheWrite5m": 0.00 },
+    "gpt-4.1":           { "input":  2.00, "output":  8.00, "cacheRead": 0.50, "cacheWrite5m": 0.00 },
+    "gpt-4o":            { "input":  2.50, "output": 10.00, "cacheRead": 1.25, "cacheWrite5m": 0.00 },
+
+    "gemini-2.5-pro":    { "input":  1.25, "output": 10.00, "cacheRead": 0.31, "cacheWrite5m": 0.00 },
+    "gemini-2.5-flash":  { "input":  0.30, "output":  2.50, "cacheRead": 0.075, "cacheWrite5m": 0.00 },
+    "gemini-3":          { "input":  2.00, "output": 12.00, "cacheRead": 0.50, "cacheWrite5m": 0.00 }
+  }
+}

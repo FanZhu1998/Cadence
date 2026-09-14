@@ -1,0 +1,188 @@
+<!--
+  Shared control styles, following the fan-zhu.com type system.
+
+  Three rules hold the whole thing together:
+    - Structure is spoken in monospace, uppercase and letterspaced. Content is spoken in the body
+      face. If a label names a thing rather than being the thing, it is mono.
+    - Every number is tabular so a refresh never reflows a row.
+    - The dominant accent belongs to the forecast. Structural labels take the receded second tone,
+      which is what having two tones of one hue is for.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:theme="clr-namespace:Cadence.App.Theme">
+
+  <theme:HexToBrushConverter x:Key="HexToBrush" />
+  <theme:InverseBooleanConverter x:Key="InverseBoolean" />
+
+  <!-- Body ==================================================================================== -->
+
+  <Style x:Key="BodyText" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource UiFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontMd}" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+    <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
+  </Style>
+
+  <!-- Secondary prose: the forecast sentence. Ink-2, never muted, because this is content. -->
+  <Style x:Key="ProseText" TargetType="TextBlock" BasedOn="{StaticResource BodyText}">
+    <Setter Property="FontSize" Value="{DynamicResource FontSm}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2Brush}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="LineHeight" Value="18" />
+  </Style>
+
+  <Style x:Key="MutedText" TargetType="TextBlock" BasedOn="{StaticResource BodyText}">
+    <Setter Property="FontSize" Value="{DynamicResource FontSm}" />
+    <Setter Property="Foreground" Value="{DynamicResource MutedBrush}" />
+  </Style>
+
+  <Style x:Key="CaptionText" TargetType="TextBlock" BasedOn="{StaticResource BodyText}">
+    <Setter Property="FontSize" Value="{DynamicResource FontXs}" />
+    <Setter Property="Foreground" Value="{DynamicResource MutedBrush}" />
+  </Style>
+
+  <!-- Structure ===============================================================================
+       The eyebrow and mono label idioms. Small, uppercase, widely tracked monospace: what makes a
+       dense panel scannable without drawing a box around every group.
+  -->
+  <Style x:Key="EyebrowText" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource NumericFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontMicro}" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource Accent2Brush}" />
+    <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+    <Setter Property="theme:Tracking.Em" Value="140" />
+  </Style>
+
+  <!-- Names a value rather than being one: RESETS IN, TODAY, 30D. -->
+  <Style x:Key="LabelText" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource NumericFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontMicro}" />
+    <Setter Property="Foreground" Value="{DynamicResource MutedBrush}" />
+    <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+    <Setter Property="theme:Tracking.Em" Value="100" />
+  </Style>
+
+  <Style x:Key="BrandText" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource NumericFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSm}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    <Setter Property="theme:Tracking.Em" Value="120" />
+  </Style>
+
+  <Style x:Key="TitleText" TargetType="TextBlock" BasedOn="{StaticResource BodyText}">
+    <Setter Property="FontFamily" Value="{DynamicResource DisplayFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontXl}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <Style x:Key="SectionHeading" TargetType="TextBlock" BasedOn="{StaticResource BodyText}">
+    <Setter Property="FontFamily" Value="{DynamicResource DisplayFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontLg}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Margin" Value="0,6,0,10" />
+  </Style>
+
+  <!-- Numbers =================================================================================
+       Tabular and right-aligned. A value moving from 9% to 17% must not shift its column.
+  -->
+  <Style x:Key="NumericText" TargetType="TextBlock" BasedOn="{StaticResource BodyText}">
+    <Setter Property="FontFamily" Value="{DynamicResource NumericFont}" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="TextAlignment" Value="Right" />
+    <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+  </Style>
+
+  <!-- The headline figure on a row. -->
+  <Style x:Key="MetricText" TargetType="TextBlock" BasedOn="{StaticResource NumericText}">
+    <Setter Property="FontSize" Value="{DynamicResource FontLg}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <!-- Buttons ================================================================================= -->
+
+  <Style x:Key="SubtleButton" TargetType="Button">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Foreground" Value="{DynamicResource MutedBrush}" />
+    <Setter Property="FontFamily" Value="{DynamicResource NumericFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontMicro}" />
+    <Setter Property="Padding" Value="9,6" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border x:Name="Root" Background="{TemplateBinding Background}"
+                  CornerRadius="3" Padding="{TemplateBinding Padding}">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Root" Property="Background" Value="{DynamicResource AccentDimBrush}" />
+              <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Opacity" Value="0.45" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- A bordered square that fills with accent-dim on hover, as the source icon button does. -->
+  <Style x:Key="IconButton" TargetType="Button" BasedOn="{StaticResource SubtleButton}">
+    <Setter Property="Width" Value="26" />
+    <Setter Property="Height" Value="26" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2Brush}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border x:Name="Root" Background="Transparent" CornerRadius="3"
+                  BorderBrush="{DynamicResource HairlineBrush}" BorderThickness="1">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Root" Property="Background" Value="{DynamicResource AccentDimBrush}" />
+              <Setter TargetName="Root" Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+              <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource SubtleButton}">
+    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <!-- Layout ================================================================================== -->
+
+  <Style x:Key="Hairline" TargetType="Border">
+    <Setter Property="Height" Value="1" />
+    <Setter Property="Background" Value="{DynamicResource HairlineBrush}" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+  </Style>
+
+  <Style x:Key="ThinScrollViewer" TargetType="ScrollViewer">
+    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
+    <Setter Property="PanningMode" Value="VerticalOnly" />
+  </Style>
+
+  <Style x:Key="Explainer" TargetType="TextBlock" BasedOn="{StaticResource CaptionText}">
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Margin" Value="0,0,0,14" />
+    <Setter Property="LineHeight" Value="17" />
+  </Style>
+
+
+</ResourceDictionary>

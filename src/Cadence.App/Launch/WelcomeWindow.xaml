@@ -1,0 +1,93 @@
+<Window x:Class="Cadence.App.Launch.WelcomeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="clr-namespace:Cadence.App.Theme"
+        Title="Welcome to Cadence"
+        Width="420" SizeToContent="Height"
+        WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="False"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="True" Topmost="True"
+        Background="{DynamicResource PageBrush}"
+        UseLayoutRounding="True" SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Ideal">
+
+  <Window.Resources>
+    <!-- The filled accent button, after the source site's primary button. It is the only filled
+         button in the app, kept for the one moment that needs an unmistakable default. -->
+    <Style x:Key="PrimaryButton" TargetType="Button">
+      <Setter Property="Foreground" Value="{DynamicResource PageBrush}" />
+      <Setter Property="FontFamily" Value="{DynamicResource NumericFont}" />
+      <Setter Property="FontSize" Value="{DynamicResource FontXs}" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Padding" Value="18,9" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="Root" CornerRadius="3" Padding="{TemplateBinding Padding}"
+                    Background="{DynamicResource AccentBrush}"
+                    BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Root" Property="Background" Value="{DynamicResource AccentHiBrush}" />
+                <Setter TargetName="Root" Property="BorderBrush" Value="{DynamicResource AccentHiBrush}" />
+              </Trigger>
+              <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="Root" Property="BorderBrush" Value="{DynamicResource AccentHiBrush}" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Window.Resources>
+
+  <Border BorderThickness="1" BorderBrush="{DynamicResource Hairline2Brush}" CornerRadius="4">
+    <StackPanel Margin="24,22,24,20">
+
+      <!-- Brand -->
+      <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+        <Border Width="20" Height="20" CornerRadius="3" Margin="0,0,9,0" VerticalAlignment="Center"
+                BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1">
+          <TextBlock Text="C" Foreground="{DynamicResource AccentBrush}"
+                     FontFamily="{DynamicResource NumericFont}" FontSize="10" FontWeight="Bold"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+        <TextBlock theme:Tracking.Text="CADENCE" Style="{StaticResource BrandText}" VerticalAlignment="Center" />
+      </StackPanel>
+
+      <TextBlock theme:Tracking.Text="FIRST RUN" Style="{StaticResource EyebrowText}" Margin="0,0,0,8" />
+      <TextBlock Text="Cadence is running." Style="{StaticResource TitleText}" Margin="0,0,0,12" />
+
+      <TextBlock Style="{StaticResource ProseText}" Margin="0,0,0,14"
+                 Text="It lives in the system tray beside the clock, watching your Claude, Codex and Gemini quotas and forecasting when each one will run out." />
+
+      <!-- The pin hint: the single most likely reason a new user thinks nothing happened. -->
+      <Border Background="{DynamicResource Surface2Brush}" BorderBrush="{DynamicResource HairlineBrush}"
+              BorderThickness="1" CornerRadius="3" Padding="12,10" Margin="0,0,0,20">
+        <StackPanel>
+          <TextBlock theme:Tracking.Text="NOT SEEING IT?" Style="{StaticResource LabelText}"
+                     Foreground="{DynamicResource Accent2Brush}" />
+          <TextBlock Style="{StaticResource ProseText}" Margin="0,6,0,0"
+                     Text="Windows often hides new tray icons under the ^ arrow on the taskbar. Open it and drag Cadence onto the taskbar to keep it in view." />
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Hairline}" Margin="0,0,0,16" />
+
+      <CheckBox x:Name="LaunchAtSignInCheck" Content="Start Cadence when I sign in" />
+      <CheckBox x:Name="StartMenuCheck" Content="Add Cadence to the Start menu" />
+      <TextBlock Style="{StaticResource CaptionText}" TextWrapping="Wrap" Margin="26,0,0,20"
+                 Text="Nothing changes until you continue. Start at sign-in can be switched off later in Settings." />
+
+      <Grid>
+        <Button Content="SKIP" Style="{StaticResource SubtleButton}" HorizontalAlignment="Left"
+                IsCancel="True" Click="OnSkip" />
+        <Button x:Name="GetStartedButton" Content="GET STARTED" Style="{StaticResource PrimaryButton}"
+                HorizontalAlignment="Right" IsDefault="True" Click="OnGetStarted" />
+      </Grid>
+    </StackPanel>
+  </Border>
+</Window>

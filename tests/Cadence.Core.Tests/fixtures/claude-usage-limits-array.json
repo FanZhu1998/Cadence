@@ -1,0 +1,39 @@
+{
+  "five_hour": { "utilization": 5.0, "resets_at": "2026-09-14T03:20:00.995778+00:00",
+                 "limit_dollars": null, "used_dollars": null, "remaining_dollars": null, "locked_reason": null },
+  "seven_day": { "utilization": 57.0, "resets_at": "2026-09-16T15:00:00.995796+00:00",
+                 "limit_dollars": null, "used_dollars": null, "remaining_dollars": null, "locked_reason": null },
+  "seven_day_oauth_apps": null,
+  "seven_day_opus": null,
+  "seven_day_sonnet": null,
+  "seven_day_cowork": null,
+  "nimbus_quill": { "utilization": 0.0, "resets_at": null, "limit_dollars": null,
+                    "used_dollars": null, "remaining_dollars": null, "locked_reason": null },
+  "tangelo": null,
+  "iguana_necktie": null,
+  "seven_day_breakdown": {
+    "as_of": "2026-09-13T22:34:19.066727+00:00",
+    "window_started_at": "2026-09-09T15:00:00.995796+00:00",
+    "rows": [
+      { "key": "claude_code", "display_name": "Claude Code", "percent": 75 },
+      { "key": "chat", "display_name": "Chats", "percent": 25 }
+    ]
+  },
+  "extra_usage": { "is_enabled": true, "monthly_limit": 10000, "used_credits": 8941.0,
+                   "utilization": 89.41, "currency": "USD", "decimal_places": 2,
+                   "disabled_reason": null, "user_disabled": false, "spend_limit_reached": false },
+  "limits": [
+    { "kind": "session", "group": "session", "percent": 5, "severity": "normal",
+      "resets_at": "2026-09-14T03:20:00.995778+00:00", "scope": null, "is_active": false },
+    { "kind": "weekly_all", "group": "weekly", "percent": 57, "severity": "normal",
+      "resets_at": "2026-09-16T15:00:00.995796+00:00", "scope": null, "is_active": false },
+    { "kind": "weekly_scoped", "group": "weekly", "percent": 76, "severity": "warning",
+      "resets_at": "2026-09-16T14:59:59.995968+00:00",
+      "scope": { "model": { "id": null, "display_name": "Fable" }, "surface": null }, "is_active": true }
+  ],
+  "spend": {
+    "used":  { "amount_minor": 8941, "currency": "USD", "exponent": 2 },
+    "limit": { "amount_minor": 10000, "currency": "USD", "exponent": 2 },
+    "percent": 89, "severity": "warning", "enabled": true
+  }
+}

@@ -1,0 +1,163 @@
+<Window x:Class="Cadence.App.Settings.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cadence Settings"
+        Width="620" Height="560" MinWidth="520" MinHeight="420"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource SurfaceBrush}"
+        UseLayoutRounding="True" SnapsToDevicePixels="True">
+
+  <Window.Resources>
+  </Window.Resources>
+
+  <Grid Margin="14">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <TabControl Grid.Row="0" Background="Transparent" BorderThickness="0">
+
+      <TabItem Header="General">
+        <ScrollViewer Style="{StaticResource ThinScrollViewer}" Margin="0,12,0,0">
+          <StackPanel>
+            <TextBlock Text="Refresh" Style="{StaticResource SectionHeading}" />
+            <ComboBox x:Name="CadenceBox" />
+            <TextBlock Style="{StaticResource Explainer}"
+                       Text="Adaptive polls about every 5 minutes, speeds up when a window is nearly spent and about to reset, and backs off when the machine is locked, idle, or on battery saver. Cadence never polls faster than once a minute: these are undocumented endpoints on someone else's infrastructure." />
+
+            <TextBlock Text="Appearance" Style="{StaticResource SectionHeading}" />
+            <ComboBox x:Name="ThemeBox" />
+            <ComboBox x:Name="IconStyleBox" />
+            <CheckBox x:Name="MergeIconsCheck" Content="One merged tray icon instead of one per provider" />
+            <CheckBox x:Name="ShowRemainingCheck" Content="Show remaining rather than used" />
+
+            <TextBlock Text="Floating HUD" Style="{StaticResource SectionHeading}" />
+            <CheckBox x:Name="ShowHudCheck" Content="Show the floating HUD" />
+            <CheckBox x:Name="LockHudCheck" Content="Lock it in place (never intercepts a click)" />
+            <Button x:Name="ResetHudButton" Content="Reset HUD position" Style="{StaticResource SubtleButton}"
+                    HorizontalAlignment="Left" Click="OnResetHudPosition" Margin="0,0,0,8" />
+            <TextBlock Style="{StaticResource Explainer}"
+                       Text="An always-on-top strip showing each provider as one line: percentage, pace against even consumption, and when it runs out. Drag it anywhere; it snaps to screen edges and remembers where you put it for each monitor arrangement. Unlocked it becomes clickable while your cursor is over it, so it cannot be dragged once locked." />
+
+            <TextBlock Text="Startup" Style="{StaticResource SectionHeading}" />
+            <CheckBox x:Name="StartupCheck" Content="Start Cadence when I sign in" />
+
+            <TextBlock Text="Updates" Style="{StaticResource SectionHeading}" />
+            <CheckBox x:Name="AutoUpdateCheck" Content="Download new versions automatically" />
+            <StackPanel Orientation="Horizontal" Margin="0,2,0,10">
+              <Button x:Name="UpdateButton" Content="Check now" Style="{StaticResource SubtleButton}"
+                      Click="OnUpdateButton" Margin="0,0,12,0" />
+              <TextBlock x:Name="UpdateStatusText" Style="{StaticResource CaptionText}" VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBlock x:Name="UpdateExplainer" Style="{StaticResource Explainer}" />
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Providers">
+        <Grid Margin="0,12,0,0">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <ComboBox x:Name="ProviderBox" Width="160" Margin="0,0,10,0" />
+            <CheckBox x:Name="ProviderEnabledCheck" Content="Enabled" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <Button x:Name="TestButton" Content="Test connection" Style="{StaticResource SubtleButton}"
+                    Click="OnTestConnection" />
+          </StackPanel>
+
+          <!-- Verbose diagnostics. When an undocumented endpoint changes shape under us, this is
+               the page that says so in ten seconds instead of an hour.  -->
+          <Border Grid.Row="1" Background="{DynamicResource HoverBrush}" CornerRadius="6" Padding="10">
+            <ScrollViewer Style="{StaticResource ThinScrollViewer}">
+              <TextBox x:Name="DiagnosticsBox" IsReadOnly="True" TextWrapping="Wrap"
+                       Background="Transparent" BorderThickness="0"
+                       Foreground="{DynamicResource MutedBrush}"
+                       FontFamily="{DynamicResource NumericFont}" FontSize="11"
+                       Text="Choose a provider and select Test connection.&#x0a;&#x0a;The result shows the resolved credential path, which strategy in the chain ran and where it stopped, the HTTP status, and the first part of the response with every token redacted." />
+            </ScrollViewer>
+          </Border>
+        </Grid>
+      </TabItem>
+
+      <TabItem Header="Forecast">
+        <ScrollViewer Style="{StaticResource ThinScrollViewer}" Margin="0,12,0,0">
+          <StackPanel>
+            <CheckBox x:Name="ForecastEnabledCheck" Content="Show forecasts" />
+            <CheckBox x:Name="BlendedCheck" Content="Use the blended estimator rather than plain even-pace" />
+            <TextBlock Style="{StaticResource Explainer}"
+                       Text="The blend weighs a responsive burn-rate estimate against the robust even-pace baseline by how much evidence it has. Run 'cadence forecast backtest' to check it actually beats the baseline on your own history — if it does not, turn it off." />
+
+            <CheckBox x:Name="ProfileCheck" Content="Learn my working rhythm from history" />
+            <TextBlock Style="{StaticResource Explainer}"
+                       Text="Projects weekly windows over the hours you actually work rather than over raw wall-clock time, so an idle weekend does not read as an idle week." />
+
+            <TextBlock Text="Working hours per day" Style="{StaticResource SectionHeading}" />
+            <ComboBox x:Name="WorkHoursBox" />
+            <TextBlock Style="{StaticResource Explainer}"
+                       Text="Overrides the learned rhythm. Useful when next week will not look like last week." />
+
+            <CheckBox x:Name="BandsCheck" Content="Show prediction bands" />
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Notifications">
+        <ScrollViewer Style="{StaticResource ThinScrollViewer}" Margin="0,12,0,0">
+          <StackPanel>
+            <CheckBox x:Name="ThresholdsCheck" Content="Usage reaches 50%, 75%, 90%, 95%, 98% or 100%" />
+            <CheckBox x:Name="ExhaustCheck" Content="The forecast says a window will run out before it resets (at most once per window)" />
+            <CheckBox x:Name="ResetCheck" Content="A weekly window resets" />
+            <CheckBox x:Name="AuthCheck" Content="Credentials expire and need signing in again" />
+            <CheckBox x:Name="IncidentCheck" Content="A provider reports an incident" />
+            <CheckBox x:Name="CreditsCheck" Content="Credits are close to expiring" />
+
+            <TextBlock Style="{StaticResource Explainer}" Margin="0,10,0,0"
+                       Text="Each level is announced once per window until that window resets, and a jump past several levels at once brings one message, for the highest. Messages about the same window are at least 30 minutes apart, except when it runs out completely. Nothing appears while you are presenting or focus assist is on, and a restart never repeats a message you have already seen." />
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Advanced">
+        <ScrollViewer Style="{StaticResource ThinScrollViewer}" Margin="0,12,0,0">
+          <StackPanel>
+            <TextBlock Text="Local cost scanning" Style="{StaticResource SectionHeading}" />
+            <CheckBox x:Name="CostEnabledCheck" Content="Read session transcripts to estimate tokens and cost" />
+            <TextBlock Style="{StaticResource Explainer}"
+                       Text="Reads the JSONL transcripts Claude Code and Codex already write on this machine. Nothing leaves your computer, and figures are priced at public API list rates, which is not what a subscription bills." />
+
+            <TextBlock Text="Where Cadence keeps things" Style="{StaticResource SectionHeading}" />
+            <TextBox x:Name="PathsBox" IsReadOnly="True" TextWrapping="NoWrap"
+                     Background="Transparent" BorderThickness="0"
+                     Foreground="{DynamicResource MutedBrush}"
+                     FontFamily="{DynamicResource NumericFont}" FontSize="11" Margin="0,0,0,10" />
+
+            <StackPanel Orientation="Horizontal">
+              <Button x:Name="OpenConfigButton" Content="Open config folder" Style="{StaticResource SubtleButton}"
+                      Click="OnOpenConfigFolder" Margin="0,0,8,0" />
+              <Button x:Name="OpenLogsButton" Content="Open logs" Style="{StaticResource SubtleButton}"
+                      Click="OnOpenLogs" Margin="0,0,8,0" />
+              <Button x:Name="DiagnosticsButton" Content="Export diagnostics bundle" Style="{StaticResource SubtleButton}"
+                      Click="OnExportDiagnostics" />
+            </StackPanel>
+
+            <TextBlock Style="{StaticResource Explainer}" Margin="0,10,0,0"
+                       Text="The diagnostics bundle zips the logs, a redacted copy of your settings, and the most recent snapshots. Every token is stripped before anything is written." />
+
+            <TextBlock Text="Privacy" Style="{StaticResource SectionHeading}" />
+            <TextBlock Style="{StaticResource Explainer}"
+                       Text="Cadence talks only to the providers' own APIs, their public status feeds and, when installed, GitHub to look for updates. There is no telemetry, no crash reporting and no analytics. It reuses the sign-ins Claude Code and Codex already saved on this computer, reads them fresh each time, and stores no credentials of its own." />
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+    </TabControl>
+
+    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+      <Button x:Name="CloseButton" Content="Close" Style="{StaticResource SubtleButton}" Click="OnClose"
+              Padding="16,6" />
+    </StackPanel>
+  </Grid>
+</Window>

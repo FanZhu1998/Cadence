@@ -1,0 +1,22 @@
+{
+  "account": {
+    "uuid": "00000000-0000-0000-0000-000000000000",
+    "full_name": "Example User",
+    "display_name": "Example",
+    "email": "user@example.com",
+    "has_claude_max": true,
+    "has_claude_pro": false,
+    "created_at": "2024-03-28T20:21:30.624550Z"
+  },
+  "organization": {
+    "uuid": "00000000-0000-0000-0000-000000000001",
+    "name": "user@example.com's Organization",
+    "organization_type": "claude_max",
+    "billing_type": "stripe_subscription",
+    "rate_limit_tier": "default_claude_max_5x",
+    "seat_tier": null,
+    "has_extra_usage_enabled": true,
+    "subscription_status": "active"
+  },
+  "application": { "name": "Claude Code", "slug": "claude-code" }
+}
