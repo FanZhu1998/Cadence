@@ -371,7 +371,7 @@ public partial class App : Application
     {
         if (!_settings.Cost.Enabled || _history is null) return;
 
-        _costScanner = new CostScanner(_history, PricingTable.Load(), _loggerFactory.CreateLogger<CostScanner>());
+        _costScanner = new CostScanner(_history, _loggerFactory.CreateLogger<CostScanner>());
 
         _ = Task.Run(async () =>
         {

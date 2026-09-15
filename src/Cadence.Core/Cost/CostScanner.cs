@@ -9,10 +9,9 @@ public sealed record ScanReport(
     int FilesSeen,
     int FilesRead,
     int EntriesFound,
-    long BytesRead,
-    IReadOnlyList<string> UnpricedModels)
+    long BytesRead)
 {
-    public static readonly ScanReport Empty = new(0, 0, 0, 0, []);
+    public static readonly ScanReport Empty = new(0, 0, 0, 0);
 }
 
 /// <summary>
@@ -26,7 +25,6 @@ public sealed record ScanReport(
 /// </remarks>
 public sealed class CostScanner(
     HistoryRepository history,
-    PricingTable pricing,
     ILogger<CostScanner> logger,
     IReadOnlyList<IJsonlScanner>? scanners = null)
 {
@@ -42,7 +40,6 @@ public sealed class CostScanner(
         var cutoff = now - retention;
         int filesSeen = 0, filesRead = 0, entriesFound = 0;
         long bytesRead = 0;
-        var unpriced = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var scanner in _scanners)
         {
@@ -103,17 +100,8 @@ public sealed class CostScanner(
 
                     if (entries.Count > 0)
                     {
-                        foreach (var entry in entries)
-                        {
-                            if (pricing.IsUnpriced(entry.Model)) unpriced.Add(entry.Model);
-                        }
-
-                        var priced = entries
-                            .Select(e => e with { CostUsd = pricing.CostOf(e) })
-                            .ToList();
-
-                        await history.UpsertCostEntriesAsync(priced, ct).ConfigureAwait(false);
-                        entriesFound += priced.Count;
+                        await history.UpsertCostEntriesAsync(entries, ct).ConfigureAwait(false);
+                        entriesFound += entries.Count;
                     }
 
                     await history.WriteScanCursorAsync(
@@ -123,10 +111,10 @@ public sealed class CostScanner(
             }
         }
 
-        if (unpriced.Count > 0)
-            logger.LogInformation("Cost scan saw {Count} unpriced models: {Models}", unpriced.Count, string.Join(", ", unpriced));
+        if (entriesFound > 0)
+            logger.LogDebug("Token scan read {Read} of {Seen} transcripts, {Entries} new entries", filesRead, filesSeen, entriesFound);
 
-        return new ScanReport(filesSeen, filesRead, entriesFound, bytesRead, [.. unpriced]);
+        return new ScanReport(filesSeen, filesRead, entriesFound, bytesRead);
     }
 
     /// <summary>

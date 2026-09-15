@@ -12,7 +12,7 @@ using Cadence.Core.Model;
 namespace Cadence.App.History;
 
 /// <summary>One row of the cost table.</summary>
-public sealed record CostRow(string Day, string Model, string Tokens, string Cost);
+public sealed record CostRow(string Day, string Model, string Tokens);
 
 /// <summary>
 /// Usage over time, cost by day and model, and the forecast's own scorecard.
@@ -127,18 +127,17 @@ public partial class HistoryWindow : Window
         var daily = await _history.ReadDailyCostAsync(since, SelectedProvider).ConfigureAwait(true);
 
         CostSummary.Text =
-            $"{Tokens(totals.TotalTokens)} tokens · {MoneyFormat.Format(totals.CostUsd)} at API list rates "
+            $"{Tokens(totals.TotalTokens)} tokens "
             + $"(input {Tokens(totals.InputTokens)}, output {Tokens(totals.OutputTokens)}, "
             + $"cache read {Tokens(totals.CacheReadTokens)}, cache write {Tokens(totals.CacheWriteTokens)})";
 
         CostGrid.ItemsSource = daily
             .OrderByDescending(d => d.Day)
-            .ThenByDescending(d => d.CostUsd)
+            .ThenByDescending(d => d.TotalTokens)
             .Select(d => new CostRow(
                 d.Day.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 d.Model,
-                Tokens(d.TotalTokens),
-                MoneyFormat.Format(d.CostUsd)))
+                Tokens(d.TotalTokens)))
             .ToArray();
     }
 

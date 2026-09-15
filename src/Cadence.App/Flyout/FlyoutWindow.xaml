@@ -215,7 +215,7 @@
         </ItemsControl>
       </ScrollViewer>
 
-      <!-- Footer: local cost, then actions ================================================== -->
+      <!-- Footer: local token totals, then actions========================================== -->
       <StackPanel Grid.Row="2">
         <Grid Margin="14,11,14,9" Visibility="{Binding HasCost, Converter={StaticResource BoolToVisibility}}">
           <Grid.ColumnDefinitions>
@@ -223,7 +223,6 @@
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
           <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
           </Grid.RowDefinitions>
@@ -240,11 +239,6 @@
                      Style="{StaticResource NumericText}" FontSize="{DynamicResource FontXs}"
                      Foreground="{DynamicResource Text2Brush}" HorizontalAlignment="Left"
                      TextAlignment="Left" Margin="0,3,0,0" />
-
-          <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                     Text="{Binding CostDisclaimer}" Style="{StaticResource CaptionText}"
-                     FontSize="{DynamicResource FontMicro}" Opacity="0.8"
-                     Margin="0,6,0,0" TextWrapping="Wrap" />
         </Grid>
 
         <Border Style="{StaticResource Hairline}"

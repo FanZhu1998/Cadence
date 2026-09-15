@@ -84,7 +84,6 @@ public partial class SettingsWindow : Window
             $"config   {KnownPaths.ConfigFile}",
             $"history  {KnownPaths.HistoryDatabase}",
             $"logs     {KnownPaths.LogDirectory}",
-            $"pricing  {Core.Cost.PricingTable.OverridePath}",
         ]);
     }
 

@@ -15,21 +15,20 @@ public sealed record StoredSample(
     long? UsedUnits,
     DateTimeOffset? ResetsAt);
 
-/// <summary>Aggregated token and cost totals over a period.</summary>
+/// <summary>Aggregated token totals over a period.</summary>
 public sealed record CostTotals(
     long InputTokens,
     long OutputTokens,
     long CacheReadTokens,
-    long CacheWriteTokens,
-    decimal CostUsd)
+    long CacheWriteTokens)
 {
     public long TotalTokens => InputTokens + OutputTokens + CacheReadTokens + CacheWriteTokens;
 
-    public static readonly CostTotals Empty = new(0, 0, 0, 0, 0m);
+    public static readonly CostTotals Empty = new(0, 0, 0, 0);
 }
 
 /// <summary>A day's totals, for the history chart.</summary>
-public sealed record DailyCost(DateOnly Day, string Model, long TotalTokens, decimal CostUsd);
+public sealed record DailyCost(DateOnly Day, string Model, long TotalTokens);
 
 /// <summary>
 /// Append-only sample store plus the cost ledger, on SQLite with WAL.
@@ -94,6 +93,8 @@ public sealed class HistoryRepository : IAsyncDisposable, IDisposable
 
         // entry_id is the provider's own dedup key: (message.id|requestId) for Claude,
         // response_id for Codex. The primary key is what makes rescanning a file idempotent.
+        // Databases created while Cadence still estimated dollars also have a cost_usd column. It is
+        // never read or written now, and its default keeps inserts that leave it out valid.
         await ExecuteAsync(
             """
             CREATE TABLE IF NOT EXISTS cost_entry (
@@ -107,7 +108,6 @@ public sealed class HistoryRepository : IAsyncDisposable, IDisposable
               cache_write_5m_tokens INTEGER NOT NULL DEFAULT 0,
               cache_write_1h_tokens INTEGER NOT NULL DEFAULT 0,
               reasoning_tokens      INTEGER NOT NULL DEFAULT 0,
-              cost_usd              REAL    NOT NULL DEFAULT 0,
               PRIMARY KEY (provider, entry_id)
             ) WITHOUT ROWID;
             """, ct).ConfigureAwait(false);
@@ -258,16 +258,15 @@ public sealed class HistoryRepository : IAsyncDisposable, IDisposable
                 """
                 INSERT INTO cost_entry (provider, entry_id, ts_utc, model, input_tokens, output_tokens,
                                         cache_read_tokens, cache_write_5m_tokens, cache_write_1h_tokens,
-                                        reasoning_tokens, cost_usd)
-                VALUES ($provider, $id, $ts, $model, $in, $out, $cread, $c5m, $c1h, $reason, $cost)
+                                        reasoning_tokens)
+                VALUES ($provider, $id, $ts, $model, $in, $out, $cread, $c5m, $c1h, $reason)
                 ON CONFLICT(provider, entry_id) DO UPDATE SET
                   ts_utc = excluded.ts_utc, model = excluded.model,
                   input_tokens = excluded.input_tokens, output_tokens = excluded.output_tokens,
                   cache_read_tokens = excluded.cache_read_tokens,
                   cache_write_5m_tokens = excluded.cache_write_5m_tokens,
                   cache_write_1h_tokens = excluded.cache_write_1h_tokens,
-                  reasoning_tokens = excluded.reasoning_tokens,
-                  cost_usd = excluded.cost_usd;
+                  reasoning_tokens = excluded.reasoning_tokens;
                 """;
 
             var provider = command.Parameters.Add("$provider", SqliteType.Text);
@@ -280,7 +279,6 @@ public sealed class HistoryRepository : IAsyncDisposable, IDisposable
             var cache5m = command.Parameters.Add("$c5m", SqliteType.Integer);
             var cache1h = command.Parameters.Add("$c1h", SqliteType.Integer);
             var reasoning = command.Parameters.Add("$reason", SqliteType.Integer);
-            var cost = command.Parameters.Add("$cost", SqliteType.Real);
 
             foreach (var entry in entries)
             {
@@ -294,7 +292,6 @@ public sealed class HistoryRepository : IAsyncDisposable, IDisposable
                 cache5m.Value = entry.CacheWrite5mTokens;
                 cache1h.Value = entry.CacheWrite1hTokens;
                 reasoning.Value = entry.ReasoningTokens;
-                cost.Value = (double)entry.CostUsd;
 
                 await command.ExecuteNonQueryAsync(ct).ConfigureAwait(false);
             }
@@ -315,8 +312,7 @@ public sealed class HistoryRepository : IAsyncDisposable, IDisposable
             """
             SELECT COALESCE(SUM(input_tokens), 0), COALESCE(SUM(output_tokens), 0),
                    COALESCE(SUM(cache_read_tokens), 0),
-                   COALESCE(SUM(cache_write_5m_tokens + cache_write_1h_tokens), 0),
-                   COALESCE(SUM(cost_usd), 0)
+                   COALESCE(SUM(cache_write_5m_tokens + cache_write_1h_tokens), 0)
             FROM cost_entry
             WHERE ts_utc >= $since AND ($provider IS NULL OR provider = $provider);
             """;
@@ -328,11 +324,10 @@ public sealed class HistoryRepository : IAsyncDisposable, IDisposable
         if (!await reader.ReadAsync(ct).ConfigureAwait(false)) return CostTotals.Empty;
 
         return new CostTotals(
-            reader.GetInt64(0), reader.GetInt64(1), reader.GetInt64(2), reader.GetInt64(3),
-            (decimal)reader.GetDouble(4));
+            reader.GetInt64(0), reader.GetInt64(1), reader.GetInt64(2), reader.GetInt64(3));
     }
 
-    /// <summary>Per-day, per-model totals for the cost chart.</summary>
+    /// <summary>Per-day, per-model token totals.</summary>
     public async Task<IReadOnlyList<DailyCost>> ReadDailyCostAsync(
         DateTimeOffset since, ProviderId? provider = null, CancellationToken ct = default)
     {
@@ -341,8 +336,7 @@ public sealed class HistoryRepository : IAsyncDisposable, IDisposable
             """
             SELECT date(ts_utc, 'unixepoch') AS day, model,
                    SUM(input_tokens + output_tokens + cache_read_tokens
-                       + cache_write_5m_tokens + cache_write_1h_tokens),
-                   SUM(cost_usd)
+                       + cache_write_5m_tokens + cache_write_1h_tokens)
             FROM cost_entry
             WHERE ts_utc >= $since AND ($provider IS NULL OR provider = $provider)
             GROUP BY day, model
@@ -359,7 +353,7 @@ public sealed class HistoryRepository : IAsyncDisposable, IDisposable
         {
             rows.Add(new DailyCost(
                 DateOnly.Parse(reader.GetString(0), System.Globalization.CultureInfo.InvariantCulture),
-                reader.GetString(1), reader.GetInt64(2), (decimal)reader.GetDouble(3)));
+                reader.GetString(1), reader.GetInt64(2)));
         }
 
         return rows;

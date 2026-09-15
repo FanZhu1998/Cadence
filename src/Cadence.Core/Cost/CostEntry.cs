@@ -48,8 +48,6 @@ public sealed record CostEntry
     /// <summary>Reasoning tokens, reported separately for display. Already inside <see cref="OutputTokens"/>.</summary>
     public long ReasoningTokens { get; init; }
 
-    public decimal CostUsd { get; init; }
-
     public long TotalTokens =>
         InputTokens + OutputTokens + CacheReadTokens + CacheWrite5mTokens + CacheWrite1hTokens;
 }
