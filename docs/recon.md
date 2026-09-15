@@ -44,8 +44,8 @@ Naive summing inflates that file's token total by **>2x**. Dedup on
 Three deviations from the blueprint:
 
 1. **`cache_creation` splits 5m vs 1h**, and those bill at different rates
-   (1h write costs more than 5m). A single "cache-write" price is wrong.
-   `pricing.json` needs `cacheWrite5m` and `cacheWrite1h`.
+   (1h write costs more than 5m). Token accounting keeps the two
+   apart, as `cache_write_5m` and `cache_write_1h`.
 2. **`iterations[]`** repeats the same fields. It is a breakdown of the
    top-level, not an addition — summing both double-counts. Top level is
    authoritative.

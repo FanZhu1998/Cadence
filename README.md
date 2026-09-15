@@ -64,7 +64,7 @@ the information is spread across:
 | **Tray icon** | One glance: two bars, a number, or a ring. Colour tracks pressure, and the tooltip carries the long-form text. |
 | **Flyout** | The real UI. One card per provider, a bar per quota window, and one plain sentence of forecast under each. |
 | **HUD** | An optional always-on-top strip, one line per provider for its current session. This is where the menu-bar vocabulary lives. |
-| **CLI** | `cadence usage --json` for your own status bar, plus cost and backtest reporting. |
+| **CLI** | `cadence usage --json` for your own status bar, plus token and backtest reporting. |
 
 ### The HUD
 
@@ -97,8 +97,8 @@ it permanently transparent at the cost of being able to drag it.
 - pace against even consumption, drawn as a tick on the bar
 - a sustainable rate: what you could spend and still land exactly at 100%
 
-**Local cost accounting** from the JSONL transcripts Claude Code and Codex already write, so token
-and spend figures keep working even when a provider endpoint is down.
+**Local token accounting** from the JSONL transcripts Claude Code and Codex already write, so token
+figures keep working even when a provider endpoint is down.
 
 ---
 
@@ -409,7 +409,7 @@ Forecast. A calibrated simple model beats an overfit clever one.
 ```
 cadence usage    [--provider claude|codex|gemini] [--json] [--verbose]
 cadence sources  [--provider ...]        what credentials this machine offers
-cadence cost     [--days 30] [--json]    local token/cost totals from session logs
+cadence tokens   [--days 30] [--json]    local token totals from session logs
 cadence forecast backtest --window <id> [--provider claude] [--days 30]
 cadence doctor                           paths, files and versions, redacted
 ```
@@ -419,15 +419,16 @@ see an endpoint change shape.
 
 ---
 
-## About the money figures
+## About the token figures
 
-Cost is computed from your local transcripts at **public API list rates**. On a subscription plan
-you are not billed any of it — the figure is "what this would have cost through the API", which is
-worth knowing and would be a lie presented as a bill. The UI says so under the totals.
+The panel and the History window show tokens counted from your local Claude Code and Codex
+transcripts, in thousands (k), millions (M) and billions (B), split into input, output, cache reads
+and cache writes.
 
-Prices live in `pricing.json`, never in code. Copy it to `%APPDATA%\Cadence\pricing.json` and edit
-any model; your overrides win per model, so correcting one price does not mean restating the table.
-Unpriced models are reported rather than silently counted as free.
+Cadence shows no dollar estimate. Neither Anthropic nor OpenAI publishes per-token prices through
+an API, so a rate table would have to be maintained by hand and would quietly go stale, and on a
+subscription plan tokens are not billed per token anyway. The dollar amounts Cadence does show,
+such as Claude's extra-usage spend, come straight from the provider.
 
 ---
 
@@ -478,7 +479,7 @@ src/
     Credentials/       DPAPI store, well-known paths
     Forecast/          estimators, epochs, Gamma bands, backtester
     History/           SQLite repository
-    Cost/              JSONL scanners and pricing
+    Cost/              JSONL scanners and token accounting
     Refresh/           store, cadence policy, coordinator
     Diagnostics/       redaction, Job Objects, support bundle
   Cadence.App/         WPF: tray renderer, flyout, settings, notifications

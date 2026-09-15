@@ -124,10 +124,10 @@
       <TabItem Header="Advanced">
         <ScrollViewer Style="{StaticResource ThinScrollViewer}" Margin="0,12,0,0">
           <StackPanel>
-            <TextBlock Text="Local cost scanning" Style="{StaticResource SectionHeading}" />
-            <CheckBox x:Name="CostEnabledCheck" Content="Read session transcripts to estimate tokens and cost" />
+            <TextBlock Text="Local token counting" Style="{StaticResource SectionHeading}" />
+            <CheckBox x:Name="CostEnabledCheck" Content="Read session transcripts to count tokens" />
             <TextBlock Style="{StaticResource Explainer}"
-                       Text="Reads the JSONL transcripts Claude Code and Codex already write on this machine. Nothing leaves your computer, and figures are priced at public API list rates, which is not what a subscription bills." />
+                       Text="Reads the JSONL transcripts Claude Code and Codex already write on this machine and counts the tokens in them, by model and day. Nothing leaves your computer." />
 
             <TextBlock Text="Where Cadence keeps things" Style="{StaticResource SectionHeading}" />
             <TextBox x:Name="PathsBox" IsReadOnly="True" TextWrapping="NoWrap"

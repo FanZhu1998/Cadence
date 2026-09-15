@@ -43,7 +43,7 @@
         </Grid>
       </TabItem>
 
-      <TabItem Header="Cost">
+      <TabItem Header="Tokens">
         <Grid Margin="0,12,0,0">
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -64,7 +64,6 @@
               <DataGridTextColumn Header="Day" Binding="{Binding Day}" Width="110" />
               <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="*" />
               <DataGridTextColumn Header="Tokens" Binding="{Binding Tokens}" Width="120" />
-              <DataGridTextColumn Header="At API rates" Binding="{Binding Cost}" Width="120" />
             </DataGrid.Columns>
           </DataGrid>
         </Grid>

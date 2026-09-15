@@ -291,18 +291,8 @@ public sealed partial class FlyoutViewModel : ObservableObject
         }
 
         static string Format(CostTotals totals)
-            => $"{Tokens(totals.TotalTokens)} tokens · {MoneyFormat.Format(totals.CostUsd)}";
+            => $"{Tokens(totals.TotalTokens)} tokens";
     }
-
-    /// <summary>
-    /// Explains what the money figure actually means.
-    /// </summary>
-    /// <remarks>
-    /// These totals are computed from local transcripts at public API rates. On a subscription
-    /// plan the user is not billed any of it — the number is "what this would have cost through
-    /// the API", which is genuinely interesting and would be a lie presented as a bill.
-    /// </remarks>
-    public string CostDisclaimer => "at API list rates · subscription usage is not billed this way";
 
     private async Task RefreshAsync()
     {

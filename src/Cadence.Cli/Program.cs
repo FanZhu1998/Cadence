@@ -49,7 +49,7 @@ internal static class Program
             {
                 "usage" => await UsageCommand(args, cancellation.Token).ConfigureAwait(false),
                 "sources" => await SourcesCommand(args, cancellation.Token).ConfigureAwait(false),
-                "cost" => await CostCommand(args, cancellation.Token).ConfigureAwait(false),
+                "tokens" or "cost" => await TokensCommand(args, cancellation.Token).ConfigureAwait(false),
                 "forecast" => await ForecastCommand(args, cancellation.Token).ConfigureAwait(false),
                 "doctor" => await DoctorCommand(cancellation.Token).ConfigureAwait(false),
                 "-h" or "--help" or "help" => Usage(),
@@ -71,7 +71,7 @@ internal static class Program
 
               cadence usage    [--provider claude|codex|gemini] [--json] [--verbose]
               cadence sources  [--provider ...]        what credentials this machine offers
-              cadence cost     [--days 30] [--json]    local token/cost totals from session logs
+              cadence tokens   [--days 30] [--json]    local token totals from session logs
               cadence forecast backtest --window <id> [--provider claude] [--days 30]
               cadence doctor                           paths, files and versions, redacted
 
@@ -227,17 +227,16 @@ internal static class Program
         return 0;
     }
 
-    // ---- cost ----------------------------------------------------------------------------------
+    // ---- tokens --------------------------------------------------------------------------------
 
-    private static async Task<int> CostCommand(string[] args, CancellationToken ct)
+    private static async Task<int> TokensCommand(string[] args, CancellationToken ct)
     {
         var days = ParseInt(args, "--days") ?? 30;
         var asJson = HasFlag(args, "--json");
 
         await using var history = await HistoryRepository.OpenAsync(ct: ct).ConfigureAwait(false);
-        var pricing = PricingTable.Load();
 
-        var scanner = new CostScanner(history, pricing, NullLogger<CostScanner>.Instance);
+        var scanner = new CostScanner(history, NullLogger<CostScanner>.Instance);
         var report = await scanner.ScanAsync(TimeSpan.FromDays(days), DateTimeOffset.UtcNow, ct).ConfigureAwait(false);
 
         var since = DateTimeOffset.UtcNow - TimeSpan.FromDays(days);
@@ -257,18 +256,11 @@ internal static class Program
 
         Console.WriteLine($"Scanned {report.FilesRead} of {report.FilesSeen} transcripts ({report.EntriesFound} new entries)");
         Console.WriteLine();
-        Console.WriteLine($"  Today   {Tokens(today.TotalTokens),12}   {MoneyFormat.Format(today.CostUsd),10}");
-        Console.WriteLine($"  {days,3}d    {Tokens(totals.TotalTokens),12}   {MoneyFormat.Format(totals.CostUsd),10}");
+        Console.WriteLine($"  Today   {Tokens(today.TotalTokens),12}");
+        Console.WriteLine($"  {days,3}d    {Tokens(totals.TotalTokens),12}");
         Console.WriteLine();
         Console.WriteLine($"  input {Tokens(totals.InputTokens)} · output {Tokens(totals.OutputTokens)} "
                           + $"· cache read {Tokens(totals.CacheReadTokens)} · cache write {Tokens(totals.CacheWriteTokens)}");
-
-        if (report.UnpricedModels.Count > 0)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"  note: no price for {string.Join(", ", report.UnpricedModels)} — totals exclude them.");
-            Console.WriteLine($"        add them to {PricingTable.OverridePath}");
-        }
 
         return 0;
     }
@@ -360,7 +352,6 @@ internal static class Program
                      ("config", KnownPaths.ConfigFile),
                      ("history", KnownPaths.HistoryDatabase),
                      ("logs", KnownPaths.LogDirectory),
-                     ("pricing override", PricingTable.OverridePath),
                  })
         {
             Console.WriteLine($"  {label,-18} {(File.Exists(path) || Directory.Exists(path) ? "present" : "absent"),-8} {path}");
@@ -395,11 +386,6 @@ internal static class Program
         Console.WriteLine("Credential store");
         var store = CodexCredentialReader.ReadStoreSetting();
         Console.WriteLine($"  codex uses: {store}");
-
-        Console.WriteLine();
-        Console.WriteLine("Pricing");
-        var pricing = PricingTable.Load();
-        Console.WriteLine($"  {pricing.ModelCount} models, table dated {pricing.LastUpdated ?? "unknown"}");
 
         var settings = await new SettingsStore().LoadAsync(ct).ConfigureAwait(false);
         Console.WriteLine();

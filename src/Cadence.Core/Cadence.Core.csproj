@@ -14,7 +14,4 @@
     <PackageReference Include="Tomlyn" />
     <PackageReference Include="System.Management" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Cost/pricing.json" LogicalName="Cadence.Core.Cost.pricing.json" />
-  </ItemGroup>
 </Project>
